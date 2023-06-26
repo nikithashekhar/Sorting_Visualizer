@@ -230,6 +230,76 @@ async function swap(array, i, j, bars) {
     return array;
 }
 
+async function MergeSort(array) {
+    let bars = document.getElementsByClassName("bar");
+    if(array.length < 2) {
+        return array;
+    }
+    const middle = Math.floor(array.length / 2);
+    const left = array.slice(0, middle);
+    const right = array.slice(middle);
+    let actualHalf = await MergeSort(left);
+    await MergeSort(right);
+
+    let i = 0;
+    let j = 0;
+    let k = 0;
+
+    while(i < left.length && j < right.length) {
+        if(left[i] < right[j]) {
+            arr[k] = left[i];
+            i++;
+        }
+        else {
+            arr[k] = right[j];
+            j++;
+        }
+    }
+
+    bars[k].style.height = arr[k] * heightFactor + "px";
+    bars[k].style.backgroundColor = "lightgreen";
+    if(k + arr.length < bars.length) {
+        bars[k + arr.length].style.height = arr[k] * heightFactor + "px";
+        bars[k + arr.length].style.backgroundColor = "yellow";
+    }
+    await sleep(speedFactor);
+    k++;
+
+    while(i < left.length) {
+        arr[k] = left[i];
+        bars[k].style.height = arr[k] * heightFactor + "px";
+        bars[k].style.backgroundColor = "lightgreen";
+        await sleep(speedFactor);
+        i++;
+        k++;
+    }
+
+    while(i < right.length) {
+        arr[k] = right[i];
+        bars[k].style.height = arr[k] * heightFactor + "px";
+        bars[k].style.backgroundColor = "lightgreen";
+        await sleep(speedFactor);
+        i++;
+        k++;
+    }
+
+    for(let k=0;k<bars.length;k++) {
+        bars[k].style.backgroundColor = "aqua";
+    }
+
+    return arr;
+}
+
+function mergeSortD(array, start, end) {
+    if(array.length < 2) {
+        return array;
+    }
+    let middle = Math.floor((start + end) / 2);
+    let left = array.slice(start, middle);
+    let right = array.slice(middle, end);
+    MergeSort(right);
+}
+
 sort.addEventListener("click", function() {
     switch(algoToUse) {
         case "bubble":
@@ -238,6 +308,16 @@ sort.addEventListener("click", function() {
         case "insertion":
             InsertionSort(unsorted_array);
             break;
+        case "merge":
+            if(
+                confirm(
+                    "Merge Sort is not visualized properly. Do you want to Continue ?"
+                )
+            ) {
+                MergeSort(unsorted_array);
+            } else {
+                break;
+            }
         // case "merge":
         //     MergeSort(unsorted_array);
         //     break;
